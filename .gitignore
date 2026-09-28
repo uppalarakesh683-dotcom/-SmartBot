@@ -1,0 +1,22 @@
+# Secrets
+.env
+.env.*
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Next.js
+frontend/node_modules/
+frontend/.next/
+
+# Local AI models
+models/
+
+# IDE
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
