@@ -1,28 +1,35 @@
 import os
 
 from dotenv import load_dotenv
-from groq import AsyncGroq
+from huggingface_hub import AsyncInferenceClient
+
 
 load_dotenv()
 
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-GROQ_MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-20b")
+HF_TOKEN = os.getenv("HF_TOKEN")
+HF_MODEL = os.getenv(
+    "HF_MODEL",
+    "meta-llama/Llama-3.1-8B-Instruct",
+)
 
-if not GROQ_API_KEY:
-    raise RuntimeError("GROQ_API_KEY is missing from .env")
+if not HF_TOKEN:
+    raise RuntimeError("HF_TOKEN is missing from .env")
 
-client = AsyncGroq(api_key=GROQ_API_KEY)
+
+client = AsyncInferenceClient(
+    api_key=HF_TOKEN,
+)
 
 
 async def generate_local_response(message: str) -> str:
     response = await client.chat.completions.create(
-        model=GROQ_MODEL,
+        model=HF_MODEL,
         messages=[
             {
                 "role": "system",
                 "content": (
                     "You are SmartBot, an intelligent AI assistant. "
-                    "Give clear, useful and accurate answers."
+                    "Give clear, useful, accurate and well-structured answers."
                 ),
             },
             {
@@ -31,11 +38,14 @@ async def generate_local_response(message: str) -> str:
             },
         ],
         temperature=0.7,
+        max_tokens=512,
     )
 
     content = response.choices[0].message.content
 
     if not content:
-        raise RuntimeError("Groq returned an empty response.")
+        raise RuntimeError(
+            "Hugging Face returned an empty response."
+        )
 
     return content
