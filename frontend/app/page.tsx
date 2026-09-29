@@ -13,7 +13,7 @@ export default function Home() {
     {
       role: "assistant",
       content:
-        "Hello! I'm SmartBot. I'm powered by your local Llama AI engine. How can I help you?",
+        "Hello! I'm SmartBot, powered by Hugging Face and Llama 3.1 8B. How can I help you?",
     },
   ]);
 
@@ -41,15 +41,18 @@ export default function Home() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message: message,
-        }),
-      });
+      const response = await fetch(
+        "http://localhost:8000/api/chat",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            message: message,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`Backend returned ${response.status}`);
@@ -72,7 +75,7 @@ export default function Home() {
         {
           role: "assistant",
           content:
-            "I couldn't connect to SmartBot. Please make sure FastAPI and LM Studio are running.",
+            "I couldn't connect to SmartBot. Please make sure the SmartBot backend is running.",
         },
       ]);
     } finally {
@@ -126,10 +129,14 @@ export default function Home() {
           </div>
 
           <div className="mt-auto border-t border-white/10 pt-4 text-xs text-zinc-500">
-            <div>Local AI</div>
+            <div>AI Engine</div>
 
             <div className="mt-1 text-emerald-400">
-              ● Llama 3.1 8B connected
+              ● Hugging Face
+            </div>
+
+            <div className="mt-1 text-zinc-500">
+              Llama 3.1 8B Instruct
             </div>
           </div>
         </aside>
@@ -142,7 +149,7 @@ export default function Home() {
               <h2 className="font-semibold">SmartBot</h2>
 
               <p className="text-xs text-zinc-500">
-                Local AI Assistant
+                Hugging Face AI Assistant
               </p>
             </div>
 
@@ -211,7 +218,7 @@ export default function Home() {
             </form>
 
             <p className="mx-auto mt-3 max-w-4xl text-center text-[11px] text-zinc-600">
-              SmartBot uses a locally hosted Llama model through LM Studio.
+              SmartBot is powered by Hugging Face and Llama 3.1 8B.
             </p>
           </div>
         </section>
